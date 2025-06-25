@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Lista de Pedidos</title>
+  <link rel="stylesheet" href="style.css">
+
+</head>
+<body>
+    <script>
+  if (localStorage.getItem('logado') !== 'true') {
+    window.location.href = 'login.html';
+  }
+  function logout() {
+  localStorage.removeItem('logado');
+  window.location.href = 'login.html';
+}
+
+</script>
+<div class="navbar">
+  <a href="index.html">Início</a>
+  <a href="produtos.html">Produtos</a>
+  <a href="pedido_form.html">Novo Pedido</a>
+  <a href="pedidos.html">Pedidos</a>
+    <a href="#" onclick="logout()"> Sair</a>
+
+</div>
+
+  <h1>Pedidos</h1>
+  <ul id="lista-pedidos"></ul>
+
+  <script>
+    fetch('/pedidos')
+      .then(res => res.json())
+      .then(pedidos => {
+        const lista = document.getElementById('lista-pedidos');
+        pedidos.forEach(p => {
+          const li = document.createElement('li');
+          let texto = `<strong>Pedido ${p.id}</strong> - Cliente: ${p.cliente}<br>Produtos:<ul>`;
+          p.itens.forEach(i => {
+            texto += `<li>${i.produto} - Quantidade: ${i.quantidade} - Preço: R$${i.preco}</li>`;
+          });
+          texto += `</ul>`;
+          li.innerHTML = texto;
+          lista.appendChild(li);
+        });
+      });
+  </script>
+</body>
+</html>

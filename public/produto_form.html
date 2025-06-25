@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Formulário de Produto</title>
+  <link rel="stylesheet" href="style.css">
+
+</head>
+<body>
+  <script>
+  if (localStorage.getItem('logado') !== 'true') {
+    window.location.href = 'login.html';
+  }
+  function logout() {
+  localStorage.removeItem('logado');
+  window.location.href = 'login.html';
+}
+
+</script>
+<div class="navbar">
+  <a href="index.html">Início</a>
+  <a href="produtos.html">Produtos</a>
+  <a href="pedido_form.html">Novo Pedido</a>
+  <a href="pedidos.html">Pedidos</a>
+    <a href="#" onclick="logout()"> Sair</a>
+
+</div>
+
+  <h1 id="titulo">Novo Produto</h1>
+  <form id="produto-form">
+    <label>ID do Produto:</label>
+    <input type="number" id="id" required><br>
+
+    <label>Nome:</label>
+    <input type="text" id="nome"><br>
+
+    <label>Descrição Breve:</label>
+    <input type="text" id="descricao_breve"><br>
+
+    <label>Preço Sugerido:</label>
+    <input type="number" id="preco_sugerido" step="0.01"><br>
+
+    <label>Unidades:</label>
+    <input type="text" id="unidades"><br>
+
+    <button type="submit" class="salvar">Salvar</button>
+  </form>
+
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const idParam = urlParams.get('id');
+
+    if (idParam) {
+      document.getElementById('titulo').innerText = 'Editar Produto';
+      fetch('/produtos/' + idParam)
+        .then(res => res.json())
+        .then(p => {
+          document.getElementById('id').value = p.id;
+          document.getElementById('nome').value = p.nome;
+          document.getElementById('descricao_breve').value = p.descricao_breve;
+          document.getElementById('preco_sugerido').value = p.preco_sugerido;
+          document.getElementById('unidades').value = p.unidades;
+        });
+    }
+
+    document.getElementById('produto-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const produto = {
+        id: document.getElementById('id').value,
+        nome: document.getElementById('nome').value,
+        descricao_breve: document.getElementById('descricao_breve').value,
+        preco_sugerido: document.getElementById('preco_sugerido').value,
+        unidades: document.getElementById('unidades').value
+      };
+
+      const method = idParam ? 'PUT' : 'POST';
+      const url = idParam ? '/produtos/' + idParam : '/produtos';
+
+      fetch(url, {
+        method: method,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(produto)
+      })
+      .then(res => {
+        if (!res.ok) {
+          return res.json().then(err => { throw err; });
+        }
+        return res.json();
+      })
+      .then(data => {
+        alert(data.message || '✅ Produto salvo com sucesso!');
+        window.location.href = 'produtos.html';
+      })
+      .catch(err => {
+        alert(err.error || '❌ Erro ao salvar o produto');
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Login</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="login-container">
+    <h1>Login</h1>
+    <form id="login-form">
+      <label>Usuário ID ou nome.sobrenome:</label>
+      <input type="text" id="usuario" required><br>
+
+      <label>Senha:</label>
+      <input type="password" id="senha" required><br>
+
+      <button type="submit" class="salvar">Entrar</button>
+      <p>Não tem conta? <a href="cadastro.html">Cadastre-se aqui</a></p>
+
+    </form>
+  </div>
+
+  <script>
+    document.getElementById('login-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const usuario = document.getElementById('usuario').value;
+      const senha = document.getElementById('senha').value;
+
+      fetch('/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ usuario, senha })
+      })
+      .then(res => {
+        if (!res.ok) {
+          return res.json().then(err => { throw err; });
+        }
+        return res.json();
+      })
+      .then(data => {
+        localStorage.setItem('logado', 'true');
+localStorage.setItem('usuarioLogado', data.nome);
+
+        alert(data.message);
+        window.location.href = 'index.html';
+      })
+      .catch(err => {
+        alert(err.error || '❌ Erro ao fazer login');
+      });
+    });
+  </script>
+</body>
+</html>

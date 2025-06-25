@@ -1,0 +1,203 @@
+/* ---------- Geral ---------- */
+body {
+  font-family: 'Segoe UI', Arial, sans-serif;
+  background-color: #f0f2f5;
+  margin: 0;
+  padding: 20px;
+  color: #333;
+}
+
+h1, h2 {
+  color: #2c3e50;
+  margin-bottom: 20px;
+  border-bottom: 2px solid #3498db;
+  padding-bottom: 8px;
+}
+
+a {
+  color: #3498db;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* ---------- Menu ---------- */
+.menu-container {
+  background-color: white;
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+  max-width: 500px;
+  margin: 100px auto;
+  text-align: center;
+}
+
+.menu-container h1 {
+  margin-bottom: 35px;
+}
+
+.menu-button {
+  display: block;
+  width: 100%;
+  margin: 15px 0;
+  padding: 15px;
+  background: linear-gradient(135deg, #3498db, #2980b9);
+  color: white;
+  border-radius: 8px;
+  font-size: 17px;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+.menu-button:hover {
+  background: linear-gradient(135deg, #2980b9, #3498db);
+  transform: scale(1.02);
+}
+
+/* ---------- Formulários ---------- */
+form {
+  background-color: white;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+  max-width: 700px;
+  margin: 30px auto;
+}
+
+label {
+  font-weight: bold;
+  margin-top: 10px;
+  display: block;
+}
+
+input, select {
+  width: 100%;
+  padding: 12px;
+  margin: 8px 0 20px 0;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+  transition: border-color 0.3s;
+}
+
+input:focus, select:focus {
+  border-color: #3498db;
+  outline: none;
+}
+
+/* ---------- Botões ---------- */
+button {
+  padding: 12px 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+button:hover {
+  transform: scale(1.05);
+}
+
+button.salvar {
+  background: linear-gradient(135deg, #27ae60, #219150);
+  color: white;
+}
+
+button.excluir {
+  background: linear-gradient(135deg, #e74c3c, #c0392b);
+  color: white;
+}
+
+button.azul {
+  background: linear-gradient(135deg, #3498db, #2980b9);
+  color: white;
+}
+
+/* ---------- Cards de Listagem ---------- */
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+li {
+  background-color: white;
+  margin-bottom: 20px;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+/* ---------- Pedido - Itens ---------- */
+.produto-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #f5f7fa;
+  padding: 15px;
+  border-radius: 10px;
+  margin-bottom: 15px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+.produto-info {
+  flex: 1;
+  font-weight: bold;
+}
+
+.produto-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.produto-actions input[type="checkbox"] {
+  transform: scale(1.3);
+}
+
+.produto-actions input[type="number"] {
+  width: 60px;
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* -------- Navbar Suave e Minimalista -------- */
+.navbar {
+  background-color: #ffffff;
+  padding: 10px 20px;
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  border-radius: 12px;
+  border: 1px solid #e0e0e0;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.navbar a {
+  color: #333;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 16px;
+  padding: 8px 16px;
+  border-radius: 8px;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.navbar a:hover {
+  background-color: #f0f0f0;
+}
+
+.navbar a.active {
+  background-color: #eaf3fc;
+  color: #1d70b8;
+}

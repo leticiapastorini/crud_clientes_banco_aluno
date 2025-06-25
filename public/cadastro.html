@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Cadastro de Funcionário</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="login-container">
+    <h1>Cadastro de Funcionário</h1>
+    <form id="cadastro-form">
+      <label>Primeiro Nome:</label>
+      <input type="text" id="primeiro_nome" required><br>
+
+      <label>Último Nome:</label>
+      <input type="text" id="ultimo_nome" required><br>
+
+      <label>UserID:</label>
+      <input type="text" id="userid" required><br>
+
+      <label>Senha:</label>
+      <input type="password" id="senha" required><br>
+
+     <label>Função:</label>
+<select id="funcao" required></select><br>
+
+      <label>Salário:</label>
+      <input type="number" id="salario" step="0.01"><br>
+
+     <label>Departamento:</label>
+     <select id="dept_id" required></select><br>
+
+      <button type="submit" class="salvar">Cadastrar</button>
+    </form>
+  </div>
+
+  <script>
+    document.getElementById('cadastro-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const dados = {
+        primeiro_nome: document.getElementById('primeiro_nome').value,
+        ultimo_nome: document.getElementById('ultimo_nome').value,
+        userid: document.getElementById('userid').value,
+        senha: document.getElementById('senha').value,
+        funcao: document.getElementById('funcao').value,
+        salario: document.getElementById('salario').value,
+        dept_id: document.getElementById('dept_id').value
+      };
+
+      fetch('/cadastro', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(dados)
+      })
+      .then(res => {
+        if (!res.ok) {
+          return res.json().then(err => { throw err; });
+        }
+        return res.json();
+      })
+      .then(data => {
+        alert(data.message);
+        window.location.href = 'login.html';
+      })
+      .catch(err => {
+        alert(err.error || ' Erro ao cadastrar');
+      });
+    });
+    fetch('/departamentos')
+  .then(res => res.json())
+  .then(departamentos => {
+    const select = document.getElementById('dept_id');
+    departamentos.forEach(dep => {
+      const option = document.createElement('option');
+      option.value = dep.id;
+      option.text = `${dep.id} - ${dep.nome}`;
+      select.appendChild(option);
+    });
+  });
+fetch('/funcoes')
+  .then(res => res.json())
+  .then(funcoes => {
+    const select = document.getElementById('funcao');
+    funcoes.forEach(f => {
+      const option = document.createElement('option');
+      option.value = f.funcao;
+      option.text = f.funcao;
+      select.appendChild(option);
+    });
+  });
+
+  </script>
+</body>
+</html>

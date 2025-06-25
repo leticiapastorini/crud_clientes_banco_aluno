@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Lista de Produtos</title>
+  <link rel="stylesheet" href="style.css">
+
+</head>
+<body>
+  <script>
+  if (localStorage.getItem('logado') !== 'true') {
+    window.location.href = 'login.html';
+  }
+</script>
+<div class="navbar">
+  <a href="index.html">Início</a>
+  <a href="produtos.html" class="active">Produtos</a>
+  <a href="pedido_form.html">Novo Pedido</a>
+  <a href="pedidos.html">Pedidos</a>
+    <a href="#" onclick="logout()"> Sair</a>
+
+</div>
+
+  <h1>Produtos</h1>
+  <button onclick="window.location.href='produto_form.html'">Novo Produto</button>
+  <ul id="lista-produtos"></ul>
+
+  <script>
+    function logout() {
+  localStorage.removeItem('logado');
+  window.location.href = 'login.html';
+}
+
+    function carregarProdutos() {
+      fetch('/produtos')
+        .then(res => res.json())
+        .then(produtos => {
+          const lista = document.getElementById('lista-produtos');
+          lista.innerHTML = '';
+          produtos.forEach(p => {
+            const li = document.createElement('li');
+            li.innerHTML = `
+              <strong>${p.nome}</strong> - ${p.descricao_breve} - R$ ${p.preco_sugerido} - Unidades: ${p.unidades ?? 0}
+              <button class="salvar" onclick="editar(${p.id})">Editar</button>
+              <button class="excluir" onclick="excluir(${p.id})">Excluir</button>
+              <a href='detalhes.html?produtoId=${p.id}'>Ver Detalhes</a>
+            `;
+            lista.appendChild(li);
+          });
+        });
+    }
+
+    function editar(id) {
+      window.location.href = 'produto_form.html?id=' + id;
+    }
+
+    function excluir(id) {
+      if (confirm('Tem certeza que deseja excluir este produto?')) {
+        fetch('/produtos/' + id, { method: 'DELETE' })
+          .then(res => res.json())
+          .then(data => {
+            alert(data.message);
+            carregarProdutos();
+          })
+          .catch(() => {
+            alert('❌ Erro ao excluir o produto!');
+          });
+      }
+    }
+
+    carregarProdutos();
+  </script>
+</body>
+</html>

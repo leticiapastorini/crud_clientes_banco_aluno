@@ -1,0 +1,58 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Detalhes do Produto</title>
+      <link rel="stylesheet" href="style.css">
+
+</head>
+<body>
+<script>
+  if (localStorage.getItem('logado') !== 'true') {
+    window.location.href = 'login.html';
+  }
+</script>
+
+<div class="navbar">
+  
+  <a href="index.html">Início</a>
+  <a href="produtos.html">Produtos</a>
+  <a href="pedido_form.html">Novo Pedido</a>
+  <a href="pedidos.html">Pedidos</a>
+  <a href="#" onclick="logout()"> Sair</a>
+
+</div>
+
+  <h1>Detalhes do Produto</h1>
+  <div id="detalhes"></div>
+  <h2>Lojas que compraram esse produto:</h2>
+  <ul id="clientes"></ul>
+
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const produtoId = urlParams.get('produtoId');
+
+    fetch(`/produtos/${produtoId}/detalhes`)
+      .then(res => res.json())
+      .then(data => {
+        const detalhesDiv = document.getElementById('detalhes');
+     detalhesDiv.innerHTML = `<h2>${data.produto.produto}</h2>
+                         <p><strong>Descrição Breve:</strong> ${data.produto.descricao_breve || 'Sem descrição'}</p>
+                         <p><strong>Texto Longo:</strong> ${data.produto.texto_longo || 'Sem descrição'}</p>`;
+
+
+        const listaClientes = document.getElementById('clientes');
+        data.clientes.forEach(c => {
+          const li = document.createElement('li');
+          li.innerText = c.cliente + " - " + (c.regiao || 'Sem região');
+          listaClientes.appendChild(li);
+        });
+      });
+      function logout() {
+  localStorage.removeItem('logado');
+  window.location.href = 'login.html';
+}
+
+  </script>
+</body>
+</html>

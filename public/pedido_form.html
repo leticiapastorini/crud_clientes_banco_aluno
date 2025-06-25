@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Criar Pedido</title>
+  <link rel="stylesheet" href="style.css">
+
+</head>
+<body>
+    <script>
+  if (localStorage.getItem('logado') !== 'true') {
+    window.location.href = 'login.html';
+  }
+  function logout() {
+  localStorage.removeItem('logado');
+  window.location.href = 'login.html';
+}
+
+</script>
+<div class="navbar">
+  <a href="index.html">Início</a>
+  <a href="produtos.html">Produtos</a>
+  <a href="pedido_form.html">Novo Pedido</a>
+  <a href="pedidos.html">Pedidos</a>
+    <a href="#" onclick="logout()"> Sair</a>
+
+</div>
+
+  <h1>Novo Pedido</h1>
+  <form id="pedido-form">
+    <label>Cliente:</label>
+    <select id="cliente"></select>
+
+    <label>Produtos:</label>
+    <div id="produtos"></div>
+
+    <button type="submit" class="salvar">Salvar Pedido</button>
+  </form>
+
+  <script>
+    fetch('/clientes')
+      .then(res => res.json())
+      .then(clientes => {
+        const select = document.getElementById('cliente');
+        clientes.forEach(c => {
+          const option = document.createElement('option');
+          option.value = c.id;
+          option.text = c.nome;
+          select.appendChild(option);
+        });
+      });
+
+    fetch('/produtos')
+      .then(res => res.json())
+      .then(produtos => {
+        const div = document.getElementById('produtos');
+        produtos.forEach(p => {
+          const container = document.createElement('div');
+          container.classList.add('produto-item');
+
+          container.innerHTML = `
+            <div class="produto-info">
+              <strong>${p.nome}</strong> (R$ ${p.preco_sugerido || 0})
+            </div>
+            <div class="produto-actions">
+              <input type="checkbox" name="produto" value="${p.id}">
+              <input type="number" id="qtd_${p.id}" value="1" min="1" style="width:60px;">
+            </div>
+          `;
+          div.appendChild(container);
+        });
+      });
+
+    document.getElementById('pedido-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const cliente_id = document.getElementById('cliente').value;
+      const selecionados = Array.from(document.querySelectorAll('input[name="produto"]:checked'));
+
+      if (selecionados.length === 0) {
+        alert('❌ Selecione pelo menos um produto!');
+        return;
+      }
+
+      const produtos = selecionados.map(input => ({
+        id: input.value,
+        quantidade: document.getElementById('qtd_' + input.value).value
+      }));
+
+      fetch('/pedidos', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ cliente_id, produtos })
+      })
+      .then(res => res.json())
+      .then(data => {
+        alert(data.message || '✅ Pedido criado com sucesso!');
+        window.location.href = 'pedidos.html';
+      })
+      .catch(() => {
+        alert('❌ Erro ao salvar pedido');
+      });
+    });
+  </script>
+</body>
+</html>
